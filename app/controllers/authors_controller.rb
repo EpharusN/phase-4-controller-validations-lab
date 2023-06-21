@@ -7,9 +7,12 @@ class AuthorsController < ApplicationController
   end
 
   def create
-    author = Author.create(author_params)
-
-    render json: author, status: :created
+    author = Author.new(author_params)
+    if author.save
+      render json: author, status: :created
+    else
+      render json: { errors: author.errors.messages }, status: :unprocessable_entity
+    end
   end
 
   private
@@ -17,5 +20,4 @@ class AuthorsController < ApplicationController
   def author_params
     params.permit(:email, :name)
   end
-  
 end
